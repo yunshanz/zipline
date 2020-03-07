@@ -12,13 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from abc import ABCMeta, abstractmethod
+try:
+    from functools32 import lru_cache
+except ImportError:
+    from functools import lru_cache
 import json
 import os
 from glob import glob
 from os.path import join
 from textwrap import dedent
 
-from lru import LRU
 import bcolz
 from bcolz import ctable
 from intervaltree import IntervalTree
@@ -946,7 +949,7 @@ class BcolzMinuteBarReader(MinuteBarReader):
         self._minutes_per_day = metadata.minutes_per_day
 
         self._carrays = {
-            field: LRU(sid_cache_sizes[field])
+            field: lru_cache(sid_cache_sizes[field])(lambda sid: sid)
             for field in self.FIELDS
         }
 
@@ -1070,7 +1073,7 @@ class BcolzMinuteBarReader(MinuteBarReader):
         sid = int(sid)
 
         try:
-            carray = self._carrays[field][sid]
+            carray = self._carrays[field](sid)
         except KeyError:
             try:
                 carray = self._carrays[field][sid] = bcolz.carray(
