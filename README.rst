@@ -116,23 +116,27 @@ https://stackoverflow.com/questions/45406213/unable-to-install-ta-lib-on-ubuntu
 Conda Setup
 ==========
 Only works in python 3.6
+
 .. code:: bash
 
     $ conda create --name dev python=3.6
     $ conda activate dev
 
 Install dependencies:
+
 .. code:: bash
 
     $ sudo apt-get -y install liblapack-dev libblas-dev gfortran
 
 Install libaries:
+
 .. code:: bash
 
     $ bash etc/dev-install
     $ pip install deltapy
 
 Change specific versions of python libs for zipline and deltapy working together:
+
 .. code:: bash
 
     $ pip install scipy==1.2
